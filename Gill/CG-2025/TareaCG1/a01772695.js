@@ -1,11 +1,10 @@
 /*
- * Script to draw a complex shape in 2D
+ * Script to draw a complex shape in 2D with correct pivot rotation
  *
  * Gilberto Echeverria
  * Jose Angel De La Cruz Alonso/ A01772695
  * 2025-07-12
  */
-
 
 'use strict';
 
@@ -50,7 +49,7 @@ const objects = {
     model: {
         transforms: {
             t: {
-                x: 280,
+                x: 536,
                 y: 265,
                 z: 0,
             },
@@ -70,7 +69,7 @@ const objects = {
     pivot: {
         transforms: {
             t: {
-                x: 280,
+                x: 536,
                 y: 280,
                 z: 0,
             },
@@ -94,7 +93,7 @@ function main() {
     const bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
     const vao = twgl.createVAOFromBufferInfo(gl, programInfo, bufferInfo);
 
-    // Crear buffers para el bigote (Pivot)
+    // Crear buffers para el bigote 
     const arraysPivot = bigote(50);
     const bufferInfoPivot = twgl.createBufferInfoFromArrays(gl, arraysPivot);
     const vaoPivot = twgl.createVAOFromBufferInfo(gl, programInfo, bufferInfoPivot);
@@ -109,35 +108,29 @@ function drawScene(gl, vao, programInfo, bufferInfo, vaoPivot, bufferInfoPivot) 
 
     gl.useProgram(programInfo.program);
 
-    // Obtener las transformaciones de la cara para enviarlas al shader y dibujar la cara
+    
     let translate = [objects.model.transforms.t.x, objects.model.transforms.t.y];
-    
-    // se agrega esta linea para obtener la posicion del pivote para despues usarla en las transformaciones
     let pivotPoint = [objects.pivot.transforms.t.x, objects.pivot.transforms.t.y];
-    
-    // en las dos lineas de abajo lo queharemos: obtener el angulo de rotacion y la escala para despues usarlas en las transformaciones
-    let angle_radians = objects.model.transforms.rr.z; // aqui en especifico solo rotacion en z
-    let scale = [objects.model.transforms.s.x, objects.model.transforms.s.y];// luego aqui la escala en x y en  y
+    let angle_radians = objects.model.transforms.rr.z;
+    let scale = [objects.model.transforms.s.x, objects.model.transforms.s.y];
 
- // De aqui 
+    
+    
+    let transforms = M3.identity();// let transforms = identidad para cada frame
+    
+    // Aplicar las transformaciones en el orden correcto
+    transforms = M3.multiply(M3.translation(pivotPoint), transforms);
+    
+    
+    transforms = M3.multiply(M3.rotation(angle_radians), transforms);// rotar al rededor del pivote
 
-  //Basicamentew lo que haremos de la parte de donde de "De aqui" a "Aca" lo que heremos basicamente es modificar la
-  // forma en que se hacen las transformaciones para que se hagan en base al pivote.
+    transforms = M3.multiply(M3.scale(scale), transforms);
     
-    let transforms = M3.identity(); // primero diremos que transforms es una matriz identidad en donde empezaremos a multiplicar las demas transformaciones
     
-    transforms = M3.multiply(M3.scale(scale), transforms); // luego en transforms multiplicamos la matriz de escala por la matriz identidad
-    
-    let relativePos = [translate[0] - pivotPoint[0], translate[1] - pivotPoint[1]];// despues obtenemos la posicion relativa restando la posicion de la cara menos la posicion del pivote
-    
-    transforms = M3.multiply(M3.translation(relativePos), transforms);// aqui en transforms multiplicamos la matriz de traslacion recordando que  la traslacion es la posicion relativa que obtuvimos en la linea anterior
+    let relativePos = [translate[0] - pivotPoint[0], translate[1] - pivotPoint[1]]; // let relativePos con esto se mueve alrededor del pivote
+    transforms = M3.multiply(M3.translation(relativePos), transforms); // y aqui se aplica la traslación final
 
-    transforms = M3.multiply(M3.rotation(angle_radians), transforms);// luego multiplamos transforms por la matriz de rotacion
-    
-    transforms = M3.multiply(M3.translation(pivotPoint), transforms); // luego multiplicamos transforms por la matriz de traslacion del pivote para regresar la figura a su posicion original
-    
-// Aca 
-
+    // Dibujar la cara
     let uniforms = {
         u_resolution: [gl.canvas.width, gl.canvas.height],
         u_transforms: transforms,
@@ -147,7 +140,7 @@ function drawScene(gl, vao, programInfo, bufferInfo, vaoPivot, bufferInfoPivot) 
     gl.bindVertexArray(vao);
     twgl.drawBufferInfo(gl, bufferInfo);
 
-    // Dibujar el bigote 
+
     let translatePivot = [objects.pivot.transforms.t.x, objects.pivot.transforms.t.y];
     const traMatPivot = M3.translation(translatePivot);
 
@@ -179,7 +172,7 @@ function setupUI(gl) {
 
     gui.addColor(objects.model, 'color');
     
-    // Controles para el bigote (Pivot)
+    // Controles para el bigote 
     const pivotFolder = gui.addFolder('Pivot');
     
     const traFolderPivot = pivotFolder.addFolder('Translation');

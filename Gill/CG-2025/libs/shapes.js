@@ -292,31 +292,32 @@ function cubeVertexColors(size) {
     return arrays;
 }
 
+//se realizo una funcion de square con el objetivo de crear la cara, ojos y pelo  de la cara 
 function square(size) {
     let arrays = {
-        // posiciones de los vértices
+        // posiciones de los vertices
         a_position: {
             numComponents: 2,
             data: new Float32Array([
-                // CARA
+                // cuadrado/ cara
                 -50, -50,
                  50, -50,
                  50,  50,
                 -50,  50,
 
-                // OJO IZQUIERDO
+                // ojo izquierdo
                 -20, -10,
                 -10, -10,
                 -10, 0,
                 -20, 0,
 
-                // OJO DERECHO
+                // ojo derecho
                 10, -10,
                 20, -10,
                 20, 0,
                 10, 0,
 
-                // PELO - rectángulo en la parte superior (arriba visual)
+                // pelo 
                 -55, -75,
                  55, -75,
                  55, -50,
@@ -328,25 +329,28 @@ function square(size) {
         a_color: {
             numComponents: 4,
             data: new Uint8Array([
-                // CARA - color piel
+                // Color 
+
+
+                // piel de la cara 
                 219, 169, 140, 255,
                 219, 169, 140, 255,
                 219, 169, 140, 255,
                 219, 169, 140, 255,
 
-                // OJO IZQUIERDO - azul
+                // ojo izquierdo
                 135, 206, 235, 255,
                 135, 206, 235, 255,
                 135, 206, 235, 255,
                 135, 206, 235, 255,
 
-                // OJO DERECHO - azul
+                // ojo derecho
                 135, 206, 235, 255,
                 135, 206, 235, 255,
                 135, 206, 235, 255,
                 135, 206, 235, 255,
 
-                // PELO - color café oscuro
+                // pelo
                 101, 67, 33, 255,
                 101, 67, 33, 255,
                 101, 67, 33, 255,
@@ -358,19 +362,19 @@ function square(size) {
         indices: {
             numComponents: 3,
             data: new Uint16Array([
-                // CARA
+                // cara
                 0, 1, 2,
                 2, 3, 0,
 
-                // OJO IZQUIERDO
+                // ojo izquierdo
                 4, 5, 6,
                 6, 7, 4,
 
-                // OJO DERECHO
+                // ojo 
                 8, 9, 10,
                 10, 11, 8,
 
-                // PELO - rectángulo simple
+                // pelo 
                 12, 13, 14,
                 14, 15, 12,
 
@@ -382,21 +386,21 @@ function square(size) {
 
 function bigote(size) {
     let arrays = {
-        // posiciones de los vértices
+        // posiciones de los vertices
         a_position: {
             numComponents: 2,
             data: new Float32Array([
-                // BIGOTE - rectángulo horizontal debajo de la nariz
-                -30, 0,   // Vértice 0 - inferior izquierdo
-                 30, 0,   // Vértice 1 - inferior derecho
-                 30, 10,  // Vértice 2 - superior derecho
-                -30, 10,  // Vértice 3 - superior izquierdo
+            
+                -30, 0,   
+                 30, 0,   
+                 30, 10,  
+                -30, 10,  
             ])
         },
         a_color: {
             numComponents: 4,
             data: new Uint8Array([
-                // BIGOTE - color café oscuro 
+               // color 
                 101, 67, 33, 255,
                 101, 67, 33, 255,
                 101, 67, 33, 255,
@@ -406,7 +410,7 @@ function bigote(size) {
         indices: {
             numComponents: 3,
             data: new Uint16Array([
-                // BIGOTE - índices corregidos (empiezan en 0)
+
                 0, 1, 2,
                 2, 3, 0,
             ])
